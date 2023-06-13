@@ -7,8 +7,8 @@ int f(int);
 int
 main() {
     int input = 10;
-//    cout << "input:";
-//    cin >> input;
+    cout << "input:";
+    cin >> input;
 
     f(input);
 
@@ -25,10 +25,6 @@ int f(int input){
         b += a;
         a = temp;
     }
-
-    // int temp = n2;
-    // n2 += n1;
-    // n1 = temp;
 
     return 0;
 }

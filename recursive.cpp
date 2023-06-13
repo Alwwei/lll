@@ -1,31 +1,34 @@
 #include <iostream>
+#include<cmath>
 
 using namespace std;
 
-int f(int,int,int);
+// int f();
 
 int
 main() {
-    int input = 10;
-//    cout << "input:";
-//    cin >> input;
 
-    f(0,1,input - 1);
+    int x,flag = 0;
+    int array[7] = {137,1829047,162761,12,5169,327781,5161};
+    cout << "nums:" << endl;
+    for(int i = 0;i < 7;i++){
+        x = array[i];
+        for(int j = 2;j <= sqrt(x);j++){
+            if(x % j == 0){
+                flag = 1;
+                // cout << x << "," << j << endl;
+                break;
+            }
+        }
+        if(flag == 0){
+            cout << x << " ";
+        }
+        flag = 0;
+    }
 
     return 0;
 }
 
-int f(int n1,int n2,int i){
-    cout << n1 << " ";
-    
-    int temp = n2;
-    n2 += n1;
-    n1 = temp;
-
-    if(i == 0){
-    //    cout << n2;
-        return 0;
-    }
-
-    return f(n1,n2,i - 1);
-}
+// int f(){
+//     return 0;
+// }
