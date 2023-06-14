@@ -11,31 +11,43 @@ using namespace std;
 int
 main() {
 
-    int input,len = 0;
+    int input,n = 0;
     cin >> input;
-    len = log10(input) + 1;
-    cout << len << endl;
-    int n = input;
-    int *p;
-    p = (int*)malloc(sizeof(int) * len);
+    int x = input;
 
-    for(int i = 0;i < len;i++){
-        int m = n / 10;
-        p[i] = n - (m * 10);
-        n = m;
-    }
-    int flag = 0;
-    for(int j = 0;j < len / 2;j++){
-        if(*(p + j) != *(p + len - j - 1)){
-            flag = 1;
+    while(1)
+    {
+        if(pow(2,n) > input){
+
+            n--;
             break;
         }
+        n++;
     }
-    
-    if(flag == 0){
-        cout << "yes the number is palindrome";
-    }else{
-        cout << "the number isn't palindrome";
+
+    int *p;
+    p = (int*)malloc(sizeof(int) * n + 1);
+    for(int i = 0;i <= n;i++){
+        *(p + i) = 0;
+    }
+
+    *(p + n) = 1;
+    x -= pow(2,n);
+
+    while(x > 0){
+        
+        for(int i = 0;i <= n;i++){
+            if(pow(2,i) > x){
+                *(p + i - 1) = 1;
+                x -= pow(2,i - 1);
+                break;
+            }
+        }
+        
+    };
+
+    for(int i = n;i >= 0;i--){
+        cout << *(p + i);
     }
 
     free(p);
