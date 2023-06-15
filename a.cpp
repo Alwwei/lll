@@ -4,53 +4,30 @@
 #include<stdlib.h>
 #include<time.h>
 
+
 using namespace std;
 
 // int f(int);
 
 int
 main() {
-
-    int input,n = 0;
-    cin >> input;
-    int x = input;
-
-    while(1)
-    {
-        if(pow(2,n) > input){
-
-            n--;
-            break;
-        }
-        n++;
-    }
-
-    int *p;
-    p = (int*)malloc(sizeof(int) * n + 1);
-    for(int i = 0;i <= n;i++){
-        *(p + i) = 0;
-    }
-
-    *(p + n) = 1;
-    x -= pow(2,n);
-
-    while(x > 0){
-        
-        for(int i = 0;i <= n;i++){
-            if(pow(2,i) > x){
-                *(p + i - 1) = 1;
-                x -= pow(2,i - 1);
-                break;
+    FILE *file = fopen("/Users/angela/desktop/api.access.log.1","r");
+    char IP_adress,skip;
+    while(!feof(file)){ 
+        IP_adress = fgetc(file);
+        cout << IP_adress;
+        if(IP_adress == ' '){
+            cout << endl;
+            while(1){
+                skip = fgetc(file);
+                if(skip == '\n'){
+                    break;
+                }
             }
         }
-        
-    };
-
-    for(int i = n;i >= 0;i--){
-        cout << *(p + i);
     }
+    fclose(file);
 
-    free(p);
     return 0;
 }
 
