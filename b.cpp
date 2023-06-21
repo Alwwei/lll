@@ -3,6 +3,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
+#include<string.h>
 
 using namespace std;
 
@@ -11,98 +12,84 @@ struct node{
     int key;
     struct node *next;
 };
+struct hash_item{
+    int value;
+    int key;
+};
+struct hash_table{
+    int size;
+    int count;
+};
+int hash_f(int key){
+    return key % 20;
+}
+node* index_array[20];
 
-int search(node *,int);
-void append(node *,int,int);
-void add_node(node *,int,int);
-
-
-
-
-int
-main() {
-    int k[3] = {3,5,7};
-    int v[3] = {10,20,30};
-    int a = 0;
-    struct node *root,*nn, *c;
-
-    root = NULL;
-
-    nn = (node *)malloc(sizeof(node));
-    nn -> key = k[a];
-    nn -> value = v[a];
-    nn -> next = NULL;
-    root = nn;
-    a++;
-//add node
-    while(a < 4){
-        add_node(root,k[a],v[a]);
-        a++;
+node*
+create_node(){
+    return (node*)malloc(sizeof(node));
+}
+void
+keyinValue(node* node,int k,int v){
+    node->key = k;
+    node->value = v;
+}
+node*
+add_node(node *root, int k,int v){
+    node *current,*new_node;
+    if(root == NULL){
+        root = create_node();
+        keyinValue(root,k,v);
+        root->next = NULL;
+        return root;
     }
-//search
-    // int b;
-    // cin >> b ;
-    // cout << search(root,b);
-//append
-    int a_k,a_v;
-    cin >> a_k >> a_v;
-    // cout << root << endl;
-    // cout << a_k << a_v << endl;
-    // append(root,a_k,a_v);
-    // cout << root << endl;
-//print out all
-    c = root;
-    cout << root -> next << endl;
-    do{
-        cout << c -> key << "," << c -> value << "," << c -> next << endl;
-        c = c -> next;
-    }while(c -> next != NULL);
-
-    return 0;
+    current = root;
+    while(current != NULL){
+        if(current->next == NULL){
+            new_node = create_node();
+            current->next = new_node;
+            keyinValue(new_node,k,v);
+            new_node->next = NULL;
+            return root;
+        }
+        current = current->next;
+    }
+    return root;
 }
 
 void
-add_node(node *root, int k, int v) {
-    node *cur = root;
-    node *nn;
-    while (cur != NULL) {
-        if (cur -> next == NULL) {
-            nn = (node *)malloc(sizeof(node));
-            nn -> key = k;
-            nn -> value = v;
-
-            cur -> next = nn;
-            nn -> next = NULL;
-            return;
-        }
-        cur = cur -> next;
+output(node* root){
+    node* current = root;
+    while(current != NULL){
+        cout << current->key << "," << current->value << endl;
+        current = current->next;
     }
 }
-
-int search(node* root,int k){
-    struct node *p;
-    p = root;
-    while(p -> next != NULL){
-        if(p -> key == k){
-            return p -> value;
-        }
-        p = p -> next;
+int
+main(){
+    node* root = NULL;
+    memset(index_array,'/0',20);
+    int k[3] = {1,2,3};
+    int v[3] = {10,20,30};
+    for(int i = 0;i < 5;i++){
+        store_data(k[i],v[i]);
     }
+    // for(int i = 0;i < 5;i++){
+    //     root = add_node(root,a[i],a[i+1]);
+    //     i++;
+    // }
+    // output(root);
+
     return 0;
 }
-
-void append(node *root,int k,int v){
-    struct node *p,*new_node;
-    p = root;
-    while(1){
-        if(p -> next == NULL){
-            new_node = (node *)malloc(sizeof(node));
-            p -> next = new_node;
-            new_node -> key = k;
-            new_node -> value = v;
-            new_node -> next = NULL;
-            return ;
-        }
-        p = p -> next;
+node* store_data(int key,int value){
+    node* root;
+    int index = hash_f(key);
+    root = index_array[index];
+    if(index_array[index] == NULL){
+        node* root = NULL;
+        index_array[index] = add_node(root,key,value);
+        return index_array[index];
     }
+    return add_node(root,key,value);
 }

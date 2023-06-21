@@ -1,7 +1,3 @@
-//
-// Created by Plain Wu on 2023/6/20.
-//
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -65,7 +61,7 @@ main(int argc, char** argv) {
     Node *root = NULL;
 
     for (int i = 0; i < 3; i++) {
-        root = addNode(root, data[i], data[i + 1]);
+        root = addNode(root, data[i], data[i + 1]); 
     }
 
     dumpList(root);
