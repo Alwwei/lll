@@ -2,9 +2,7 @@
 #include <string.h>
 #include <curl/curl.h>
 
-int main(){
-   
-   
+void POST(void){
     CURL *curl = curl_easy_init();
     if(curl) {
         CURLcode res;
@@ -13,5 +11,5 @@ int main(){
         curl_easy_cleanup(curl);
     }
 
-    return 0;
 }
+   

@@ -7,4 +7,6 @@ project("plain"
 
 add_executable(run
         linked_list.c
-        hash_table.c run.c max_heap.c)
+        hash_table.c
+        run.c
+        max_heap.c)

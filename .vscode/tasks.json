@@ -43,6 +43,17 @@
             ],
             "group": "build",
             "detail": "偵錯工具產生的工作。"
+        },
+        {
+            "type": "cmake",
+            "label": "CMake: build",
+            "command": "build",
+            "targets": [
+                "all"
+            ],
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "CMake template build task"
         }
     ],
     "version": "2.0.0"

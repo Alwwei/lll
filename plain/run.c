@@ -12,7 +12,7 @@ main(int argc, char **argv) {
     Node *item_node = NULL;
     MaxHeap heap;
 
-    FILE *file = fopen("../../api.access.log.1","r");
+    FILE *file = fopen("/Users/angela/Desktop/api.access.log.1","r");
 
     while (!feof(file)) {
         fgets(buf, 1024, file);
