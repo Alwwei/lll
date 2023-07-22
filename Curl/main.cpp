@@ -1,20 +1,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <curl/curl.h>
-#include "fetch.cpp"
-
-void get(CURL *);
+#include "fetch.h"
+#include "status_print.h"
+#include "POST.h"
+#include "upload_json.h"
 
 int main(){
    
-   
-    CURL *curl = curl_easy_init();
-    if(curl) {
-        CURLcode res;
-        curl_easy_setopt(curl, CURLOPT_URL, "https://counter.lig.com.tw");
-        get1(curl);
-        curl_easy_cleanup(curl);
-    }
+    // get1();
+    // post_request();
+    // statuscode_po();
+    // upload();
 
     return 0;
 }
