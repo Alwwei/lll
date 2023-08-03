@@ -7,8 +7,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <arpa/inet.h>
-// #define PORT 8080
-#define serverPort 48763
+#define serverPort 8080
 #define serverIP "127.0.0.1"
 
 using namespace std;
@@ -16,7 +15,6 @@ using namespace std;
 int
 main()
 {
-    int i = 0;
     int status;
     struct in_addr addr;
     if (inet_pton(AF_INET, serverIP, &addr.s_addr) == 1)
@@ -29,10 +27,10 @@ main()
         printf("After inet_ntop function, ip address: %s\n", ip_addr);
     }
 
-    int sockfd = socket(PF_INET,SOCK_DGRAM,0);
+    int sockfd = socket(AF_INET,SOCK_STREAM,0);
     char buf[1024] = {0};
     char recvbuf[1024] = {0};
-//crate soket
+
     if(sockfd < 0)
     {
         perror("failed");
@@ -45,17 +43,22 @@ main()
     };
     socklen_t len = sizeof(serverAddr);
 
-    if(connect(sockfd,(struct sockaddr*)&serverAddr,sizeof(serverAddr)))
+    if(connect(sockfd,(struct sockaddr*)&serverAddr,sizeof(serverAddr)) < 0)
     {
         perror("connect failed");
         close(sockfd);
         exit(1);
     }
 
-    while (i < 4)
+    while (1)
     {
-        strcpy(buf,"client sent success");
-        send(sockfd,buf,sizeof(buf),0);
+        gets(buf);
+        status = send(sockfd,buf,sizeof(buf),0);
+        if(status < 0)
+        {
+            cout << "send failed";
+            break;
+        }
         if(strcmp(buf,"exit") == 0){
             break;
         }
@@ -63,12 +66,11 @@ main()
         if(recv(sockfd,recvbuf,sizeof(recvbuf),0) < 0)
         {
             cout << "recieve failed" << endl;
+            break;
         }
         memset(buf,0,sizeof(buf));
         memset(recvbuf,0,sizeof(recvbuf));
-        i++;
     }
-//close socket
     if(close(sockfd) < 0)
     {
         perror("close failed");
