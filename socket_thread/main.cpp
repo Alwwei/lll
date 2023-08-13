@@ -17,9 +17,8 @@ struct socket
 {
     int new_sock;
     char buf[1024] = {0};
-    
+    char* hello;
 };
-
 
 int
 main()
@@ -32,13 +31,14 @@ main()
     int new_sock,val_read,status;
     void* res;
     int s1;
+    char hello[100];
+    strcpy(hello,"HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!");
 
     if(sockfd < 0)
     {
         perror("failed");
         exit(EXIT_FAILURE);
     }
-
     if(setsockopt(sockfd,SOL_SOCKET,SO_REUSEADDR, &opt,sizeof(opt)))
     {
         perror("setsockopt");
@@ -56,10 +56,11 @@ main()
     struct socket sock;
     while (1)
     {
-        pthread_t *t1 = (pthread_t*)malloc(sizeof(pthread_t));
+        pthread_t *t1 = (pthread_t*)malloc(sizeof(pthread_t*));
         cout << "server litsening" << endl;
         status = listen((int)sockfd,3);
         sock.new_sock = accept((int)sockfd,(struct sockaddr*)&address,(socklen_t*)&addrlen);
+        sock.hello = hello;
         cout << "accept success" << endl;
         s1 = pthread_create(t1,NULL,&threadf,(void*)&sock);
         if(s1 != 0){
@@ -67,25 +68,26 @@ main()
         }
     }
     close(new_sock);
-    
     return 0;
 }
 
 void*
 threadf(void* sock)
-{   int a;
+{   
     struct socket *s = (struct socket*)sock;
-    while(recv(s->new_sock,s->buf,sizeof(s->buf),0))
+    while(read(s->new_sock,s->buf,sizeof(s->buf)))
     {
         cout << "recieve: " << s->buf << endl;
-        a = send(s->new_sock,s->buf,strlen(s->buf),0);
-        if(a < 0)
+        if(strcmp(s->buf,"exit") == 0)
         {
+            cout << "client leaved" << endl;
             memset(s->buf,0,strlen(s->buf));
             return 0;
         }
+        // cout << s->hello << endl;
+        write(s->new_sock,s->hello,strlen(s->hello));
+        cout << "send success" << endl;
         memset(s->buf, 0, strlen(s->buf));
     }
-    cout << ":(";
     return 0;
 }

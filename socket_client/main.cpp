@@ -53,7 +53,7 @@ main()
     while (1)
     {
         gets(buf);
-        status = send(sockfd,buf,sizeof(buf),0);
+        status = write(sockfd,buf,sizeof(buf));
         if(status < 0)
         {
             cout << "send failed";
@@ -63,11 +63,12 @@ main()
             break;
         }
         memset(buf,0,sizeof(buf));
-        if(recv(sockfd,recvbuf,sizeof(recvbuf),0) < 0)
+        if(read(sockfd,recvbuf,sizeof(recvbuf)) < 0)
         {
             cout << "recieve failed" << endl;
             break;
         }
+        cout << recvbuf << endl;
         memset(buf,0,sizeof(buf));
         memset(recvbuf,0,sizeof(recvbuf));
     }
