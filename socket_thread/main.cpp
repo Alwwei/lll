@@ -31,8 +31,8 @@ main()
     int new_sock,val_read,status;
     void* res;
     int s1;
-    char hello[100];
-    strcpy(hello,"HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!");
+    char hello[1024];
+    strcpy(hello,"HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 106\n\n<!DOCTYPE html>\n<html>\n<head>\n<title>head</title>\n</head>\n<body>\n<h1>hiiiiiii</h1>\n</body>\n</html>");
 
     if(sockfd < 0)
     {
@@ -73,7 +73,7 @@ main()
 
 void*
 threadf(void* sock)
-{   
+{
     struct socket *s = (struct socket*)sock;
     while(read(s->new_sock,s->buf,sizeof(s->buf)))
     {
@@ -89,5 +89,6 @@ threadf(void* sock)
         cout << "send success" << endl;
         memset(s->buf, 0, strlen(s->buf));
     }
+    close(s->new_sock);
     return 0;
 }
