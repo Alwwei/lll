@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <pthread.h>
+#include "funcs.h"
 #define PORT 8080
 
 using namespace std;
@@ -16,7 +17,7 @@ void* threadf(void*);
 struct socket
 {
     int new_sock;
-    char buf[1024] = {0};
+    char buf[1024] = "";
     char* hello;
 };
 
@@ -32,7 +33,7 @@ main()
     void* res;
     int s1;
     char hello[1024];
-    strcpy(hello,"HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 106\n\n<!DOCTYPE html>\n<html>\n<head>\n<title>head</title>\n</head>\n<body>\n<h1>hiiiiiii</h1>\n</body>\n</html>");
+    strcpy(hello,"HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 98\n\n<!DOCTYPE html>\n<html>\n<head>\n<title>head</title>\n</head>\n<body>\n<h1>hiiiiiii</h1>\n</body>\n</html>");
 
     if(sockfd < 0)
     {
@@ -66,6 +67,7 @@ main()
         if(s1 != 0){
             perror("error");
         }
+        // free(t1);
     }
     close(new_sock);
     return 0;
@@ -75,20 +77,18 @@ void*
 threadf(void* sock)
 {
     struct socket *s = (struct socket*)sock;
-    while(read(s->new_sock,s->buf,sizeof(s->buf)))
+    read(s->new_sock,s->buf,sizeof(s->buf));
+    download(s->buf);
+    if(strcmp(s->buf,"exit") == 0)
     {
-        cout << "recieve: " << s->buf << endl;
-        if(strcmp(s->buf,"exit") == 0)
-        {
-            cout << "client leaved" << endl;
-            memset(s->buf,0,strlen(s->buf));
-            return 0;
-        }
-        // cout << s->hello << endl;
-        write(s->new_sock,s->hello,strlen(s->hello));
-        cout << "send success" << endl;
-        memset(s->buf, 0, strlen(s->buf));
+        cout << "client leaved" << endl;
+        memset(s->buf,0,strlen(s->buf));
+        return 0;
     }
+    // cout << s->hello << endl;
+    write(s->new_sock,s->hello,strlen(s->hello));
+    cout << "send success" << endl;
+    memset(s->buf, 0, strlen(s->buf));
     close(s->new_sock);
     return 0;
 }
