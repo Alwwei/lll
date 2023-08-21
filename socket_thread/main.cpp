@@ -5,6 +5,9 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/uio.h>
 #include <unistd.h>
 #include <pthread.h>
 #include "funcs.h"
@@ -76,17 +79,32 @@ main()
 void*
 threadf(void* sock)
 {
+    int n = 0;
     struct socket *s = (struct socket*)sock;
     read(s->new_sock,s->buf,sizeof(s->buf));
-    download(s->buf);
+    n = download(s->buf);
     if(strcmp(s->buf,"exit") == 0)
     {
         cout << "client leaved" << endl;
         memset(s->buf,0,strlen(s->buf));
         return 0;
     }
-    // cout << s->hello << endl;
     write(s->new_sock,s->hello,strlen(s->hello));
+    int filesz = 0;
+    int file_fd = 0;
+    off_t offset = 0;
+    if(n == 0){
+        file_fd = f0();
+    }else if(n == 1){
+        file_fd = f1();
+    }else if(n == 2){
+        file_fd = f2();
+    }else if(n == 3){
+        file_fd = f3();
+    }else{
+        file_fd = f4();
+    }
+    sendfile(s->new_sock,file_fd,offset,&offset,NULL,0);
     cout << "send success" << endl;
     memset(s->buf, 0, strlen(s->buf));
     close(s->new_sock);

@@ -1,9 +1,9 @@
+#include <stdio.h>
 
 char* get_uri(char *);
-size_t write_data(void *, size_t , size_t, FILE *);
-void f0(void);
-void f1(void);
-void f2(void);
-void f3(void);
-void f4(void);
-void download(char*);
+int f0(void);
+int f1(void);
+int f2(void);
+int f3(void);
+int f4(void);
+int download(char*);

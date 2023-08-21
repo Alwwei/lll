@@ -38,96 +38,32 @@ char* get_uri(char *request){
     return page;
 
 }
-size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *file){
-    size_t written = fwrite(ptr,size,nmemb,file);
-    return written;
+int f0(void){
+    FILE *fd = fopen("/Users/angela/x/x.mp3","r");
+    int a = fileno(fd);
+    return a;
 }
-void f0(void){
-    FILE *fp;
-    CURL *curl;
-    CURLcode res;
-    char *url = "http://127.0.0.1:8080";
-    curl = curl_easy_init();
-    if(curl){
-        fp = fopen("/Users/angela/x/x.mp3","r");
-        curl_easy_setopt(curl,CURLOPT_URL,url);
-        curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write_data);
-        curl_easy_setopt(curl,CURLOPT_WRITEDATA,fp);
-        res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-        fclose(fp);
-    }
-    return;
+int f1(void){
+    FILE *fd = fopen("/Users/angela/x/x.mp4","r");
+    int a = fileno(fd);
+    return a;
 }
-void f1(void){
-    FILE *fp;
-    CURL *curl;
-    CURLcode res;
-    char *url = "http://127.0.0.1:8080";
-    curl = curl_easy_init();
-    if(curl){
-        fp = fopen("/Users/angela/x/x.mp4","r");
-        curl_easy_setopt(curl,CURLOPT_URL,url);
-        curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write_data);
-        curl_easy_setopt(curl,CURLOPT_WRITEDATA,fp);
-        res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-        fclose(fp);
-    }
-    return;
+int f2(void){
+    FILE *fd = fopen("x.html","r");
+    int a = fileno(fd);
+    return a;
 }
-void f2(void){
-    FILE *fp;
-    CURL *curl;
-    CURLcode res;
-    char *url = "http://127.0.0.1:8080";
-    curl = curl_easy_init();
-    if(curl){
-        fp = fopen("x.html","r");
-        curl_easy_setopt(curl,CURLOPT_URL,url);
-        curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write_data);
-        curl_easy_setopt(curl,CURLOPT_WRITEDATA,fp);
-        res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-        fclose(fp);
-    }
-    return;
+int f3(void){
+    FILE *fd = fopen("x.css","r");
+    int a = fileno(fd);
+    return a;
 }
-void f3(void){
-    FILE *fp;
-    CURL *curl;
-    CURLcode res;
-    char *url = "http://127.0.0.1:8080";
-    curl = curl_easy_init();
-    if(curl){
-        fp = fopen("x.css","r");
-        curl_easy_setopt(curl,CURLOPT_URL,url);
-        curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write_data);
-        curl_easy_setopt(curl,CURLOPT_WRITEDATA,fp);
-        res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-        fclose(fp);
-    }
-    return;
+int f4(void){
+    FILE *fd = fopen("x.js","r");
+    int a = fileno(fd);
+    return a;
 }
-void f4(void){
-    FILE *fp;
-    CURL *curl;
-    CURLcode res;
-    char *url = "http://127.0.0.1:8080";
-    curl = curl_easy_init();
-    if(curl){
-        fp = fopen("x.js","r");
-        curl_easy_setopt(curl,CURLOPT_URL,url);
-        curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write_data);
-        curl_easy_setopt(curl,CURLOPT_WRITEDATA,fp);
-        res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-        fclose(fp);
-    }
-    return;
-}
-void download(char* request){
+int download(char* request){
     char buf[1024] = "accept success\nserver litsening\nGET /a.mp3 HTTP/1.1\nHost: 127.0.0.1:8080\nConnection: keep-alive";
     char* page;
     char* filename;
@@ -141,26 +77,13 @@ void download(char* request){
     int f;
     filename = (char*)malloc(10 * sizeof(char));
     page = get_uri(request);
-    // cout << page << endl;
     sscanf(page, "x.%s", filename);
-    // cout << filename;
 
     for(int i = 0;i < 5;i++){
         if(strcmp(filename,file[i]) == 0)
             f = i;
     }
 
-    if(f == 0){
-        f0();
-    }else if(f == 1){
-        f1();
-    }else if(f == 2){
-        f2();
-    }else if(f == 3){
-        f3();
-    }else{
-        f4();
-    }
-    // free(filename);
-    return ;
+    free(filename);
+    return f;
 }
